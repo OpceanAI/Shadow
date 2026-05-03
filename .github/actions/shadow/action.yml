@@ -1,0 +1,72 @@
+name: Shadow Analysis
+description: Run Shadow CLI analysis on your codebase
+author: shadow-cli
+
+inputs:
+  path:
+    description: 'Path to the project to analyze'
+    required: false
+    default: '.'
+  command:
+    description: 'Shadow command to run (info, lint, security, metrics, test, deploy)'
+    required: false
+    default: 'info'
+  output-format:
+    description: 'Output format (json, human, md, short)'
+    required: false
+    default: 'json'
+  node-version:
+    description: 'Node.js version'
+    required: false
+    default: '22'
+
+outputs:
+  result:
+    description: 'The analysis result as JSON string'
+    value: ${{ steps.run.outputs.result }}
+  passed:
+    description: 'Whether all checks passed'
+    value: ${{ steps.parse.outputs.passed }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: npm ci
+
+    - name: Build
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: npm run build
+
+    - name: Run Shadow
+      id: run
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: |
+        RESULT=$(node dist/index.js ${{ inputs.command }} --json 2>&1) || true
+        echo "result<<EOF" >> $GITHUB_OUTPUT
+        echo "$RESULT" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Parse result
+      id: parse
+      shell: bash
+      run: |
+        echo '${{ steps.run.outputs.result }}' | python3 -c "
+        import sys, json
+        try:
+            data = json.load(sys.stdin)
+            passed = str(data.get('passed', True)).lower()
+            print(f'passed={passed}')
+        except:
+            print('passed=false')
+        " >> $GITHUB_OUTPUT

@@ -1,0 +1,7 @@
+{
+  "aiProvider": "local",
+  "outputStyle": "human",
+  "privacy": {
+    "maskSecrets": true
+  }
+}

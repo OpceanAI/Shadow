@@ -1,0 +1,32 @@
+#!/bin/sh
+# Shadow pre-push hook
+# Run shadow test before pushing
+
+set -e
+
+echo "🔍 Shadow: Running pre-push checks..."
+
+if [ -f "node_modules/.bin/shadow" ] || [ -f "dist/index.js" ]; then
+  SHADOW_CMD="node dist/index.js"
+  if [ -f "node_modules/.bin/shadow" ]; then
+    SHADOW_CMD="npx shadow"
+  fi
+
+  echo "  → Running shadow test..."
+  if ! $SHADOW_CMD test --json > /dev/null 2>&1; then
+    echo "  ⚠ shadow test had issues"
+    echo "  Use --no-verify to skip this check."
+    exit 1
+  fi
+
+  echo "  → Running shadow security..."
+  if ! $SHADOW_CMD security --json > /dev/null 2>&1; then
+    echo "  ⚠ shadow security scan found issues"
+    echo "  Use --no-verify to skip this check."
+    exit 1
+  fi
+
+  echo "✓ Shadow pre-push checks passed."
+else
+  echo "  → Shadow not built — skipping pre-push checks."
+fi

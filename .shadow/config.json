@@ -1,0 +1,23 @@
+{
+  "aiProvider": "openai",
+  "outputStyle": "human",
+  "cacheEnabled": true,
+  "privacy": {
+    "maskSecrets": true,
+    "noNetwork": false,
+    "allowCloudAI": false
+  },
+  "tracingDepth": 10,
+  "testGeneration": {
+    "fuzzCount": 100,
+    "includeSecurity": true,
+    "excludePaths": ["node_modules", ".git", "dist"]
+  },
+  "deploymentChecks": {
+    "requiredEnvVars": [],
+    "buildCommand": "npm run build",
+    "smokeTestCommand": "npm test"
+  },
+  "ignoredPaths": [".git", "node_modules", "__pycache__", ".venv", "dist"],
+  "entryPoints": []
+}

@@ -1,0 +1,24 @@
+PackageIdentifier: AnomalyCo.Shadow
+PackageVersion: 0.1.0
+PackageLocale: en-US
+Publisher: Anomaly Software
+PublisherUrl: https://github.com/OpceanAI/Shadow
+PackageName: Shadow CLI
+PackageUrl: https://github.com/OpceanAI/Shadow
+License: MIT
+LicenseUrl: https://github.com/OpceanAI/Shadow/blob/main/LICENSE
+ShortDescription: Understand, trace, test, and improve any codebase from the terminal
+Tags:
+  - cli
+  - code-analysis
+  - developer-tools
+  - testing
+  - ai
+ReleaseDate: 2026-01-01
+Installers:
+  - Architecture: x64
+    InstallerType: zip
+    InstallerUrl: https://github.com/OpceanAI/Shadow/releases/download/v0.1.0/shadow-win-x64.zip
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: singleton
+ManifestVersion: 1.9.0

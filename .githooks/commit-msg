@@ -1,0 +1,44 @@
+#!/bin/sh
+# Shadow commit-msg hook
+# Use shadow to suggest a commit message
+
+COMMIT_MSG_FILE="$1"
+
+if [ -f "node_modules/.bin/shadow" ] || [ -f "dist/index.js" ]; then
+  SHADOW_CMD="node dist/index.js"
+  if [ -f "node_modules/.bin/shadow" ]; then
+    SHADOW_CMD="npx shadow"
+  fi
+
+  # Get the diff of staged changes
+  STAGED_DIFF=$(git diff --cached --stat 2>/dev/null)
+
+  if [ -n "$STAGED_DIFF" ]; then
+    echo "🔍 Shadow: Analyzing staged changes for commit message suggestion..."
+    SUGGESTION=$($SHADOW_CMD diff --json 2>/dev/null | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    changes = data.get('filesChanged', [])
+    if changes:
+        types = set()
+        for f in changes:
+            if 'fix' in f.lower(): types.add('fix')
+            elif 'test' in f.lower(): types.add('test')
+            elif 'doc' in f.lower(): types.add('docs')
+            else: types.add('feat')
+        prefix = '/'.join(sorted(types)) if len(types) < 3 else 'chore'
+        print(f'{prefix}: updates to {len(changes)} file(s)')
+except:
+    pass
+" 2>/dev/null) || true
+
+    if [ -n "$SUGGESTION" ]; then
+      echo "  Suggested: $SUGGESTION"
+      echo "  (edit the commit message if needed)"
+      # Don't overwrite the commit message, just show a suggestion
+    fi
+  else
+    echo "  → No staged changes detected."
+  fi
+fi

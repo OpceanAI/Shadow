@@ -1,0 +1,28 @@
+# Maintainer: Anomaly Software <shadow@anomaly.co>
+pkgname=shadow-cli
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Understand, trace, test, and improve any codebase from the terminal"
+arch=('any')
+url="https://github.com/OpceanAI/Shadow"
+license=('MIT')
+depends=('nodejs' 'npm')
+makedepends=('git')
+source=("$pkgname-$pkgver.tar.gz::https://registry.npmjs.org/shadow/-/shadow-$pkgver.tgz")
+sha256sums=('0000000000000000000000000000000000000000000000000000000000000000')
+
+build() {
+  cd "$srcdir/package"
+  npm install --omit=dev
+  npm run build
+}
+
+package() {
+  cd "$srcdir/package"
+  install -Dm755 dist/index.js "$pkgdir/usr/bin/shadow"
+  cp -r node_modules "$pkgdir/usr/lib/shadow/"
+  cp -r dist "$pkgdir/usr/lib/shadow/"
+  echo '#!/bin/sh' > "$pkgdir/usr/bin/shadow"
+  echo 'exec node /usr/lib/shadow/dist/index.js "$@"' >> "$pkgdir/usr/bin/shadow"
+  chmod 755 "$pkgdir/usr/bin/shadow"
+}

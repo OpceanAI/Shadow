@@ -1,0 +1,76 @@
+{
+  "name": "shadow",
+  "version": "0.1.0",
+  "description": "Understand, trace, test, and improve any codebase from the terminal.",
+  "main": "dist/index.js",
+  "bin": {
+    "shadow": "./dist/index.js"
+  },
+  "files": [
+    "dist/",
+    "scripts/postinstall.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "node scripts/e2e-test.js",
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "keywords": [
+    "cli",
+    "codebase",
+    "analysis",
+    "tracing",
+    "testing",
+    "ai",
+    "shadow",
+    "code-review",
+    "dependency-graph",
+    "code-quality",
+    "developer-tools",
+    "static-analysis",
+    "devtools"
+  ],
+  "author": "opceanai",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpceanAI/Shadow"
+  },
+  "homepage": "https://github.com/OpceanAI/Shadow#readme",
+  "bugs": {
+    "url": "https://github.com/OpceanAI/Shadow/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/OpceanAI"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "diff": "^7.0.0",
+    "glob": "^13.0.6",
+    "js-yaml": "^4.1.0",
+    "simple-git": "^3.27.0",
+    "tree-sitter": "^0.22.1"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.0",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "eslint": "^9.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.9"
+  }
+}

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  shadow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: shadow-cli:dev
+    container_name: shadow-dev
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:ro
+      - ~/.shadow:/home/shadow/.shadow:rw
+    environment:
+      - SHADOW_CACHE_DIR=/home/shadow/.shadow/cache
+    entrypoint: ["node", "dist/index.js"]
+    command: ["info"]
+
+  shadow-shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: shadow-cli:dev
+    container_name: shadow-shell
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:rw
+      - ~/.shadow:/home/shadow/.shadow:rw
+    environment:
+      - SHADOW_CACHE_DIR=/home/shadow/.shadow/cache
+    entrypoint: ["/bin/sh"]
+    stdin_open: true
+    tty: true
+    profiles:
+      - shell

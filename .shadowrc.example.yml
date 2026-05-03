@@ -1,0 +1,114 @@
+# ── Shadow CLI Configuration ──────────────────────────────────────────────────
+# Copy to .shadowrc.yml in your project root or to ~/.shadowrc for global config.
+
+# AI provider for analysis, code generation, and explanations
+aiProvider: local
+
+# Output format: human, short, json, graph, patch, md
+outputStyle: human
+
+# Caching
+cacheEnabled: true
+# cacheDir: .shadow/cache
+# cacheMaxSize: 524288000  # 500 MB
+
+# Parallelism
+# parallelWorkers: 4
+# batchSize: 50
+
+# Watch mode
+# watchDebounceMs: 300
+
+# Theme: dark, light, minimal, neon
+theme: dark
+
+# Emoji in output
+emoji: true
+
+# Verbose output
+verbose: false
+
+# Privacy settings
+privacy:
+  maskSecrets: true
+  noNetwork: false
+  allowCloudAI: false
+
+# Tracing
+tracingDepth: 10
+
+# Test generation
+testGeneration:
+  fuzzCount: 100
+  includeSecurity: true
+  excludePaths: []
+
+# Deployment checks
+deploymentChecks:
+  requiredEnvVars: []
+  buildCommand: ""
+  smokeTestCommand: ""
+
+# Ignored paths during analysis
+ignoredPaths:
+  - .git
+  - node_modules
+  - __pycache__
+  - .venv
+  - dist
+  - build
+  - coverage
+
+# Project entry points
+entryPoints: []
+
+# ── Plugins ──────────────────────────────────────────────────────────────────
+plugins:
+  sonarqube:
+    enabled: false
+    settings:
+      baseUrl: "https://sonarqube.example.com"
+  jira:
+    enabled: false
+    settings:
+      url: "https://jira.example.com"
+  codecov:
+    enabled: false
+  datadog:
+    enabled: false
+
+# ── Command aliases ──────────────────────────────────────────────────────────
+aliases:
+  ci: "shadow test --json"
+  info-short: "shadow info --short"
+  release: "shadow diff --from main"
+
+# ── Configuration profiles ───────────────────────────────────────────────────
+# Switch profiles with --profile flag or SHADOW_PROFILE env var
+activeProfile: ""
+
+profiles:
+  dev:
+    aiProvider: local
+    verbose: true
+    privacy:
+      allowCloudAI: false
+  staging:
+    aiProvider: deepseek
+    verbose: false
+    testGeneration:
+      fuzzCount: 50
+  prod:
+    aiProvider: claude
+    verbose: false
+    cacheEnabled: true
+    testGeneration:
+      fuzzCount: 500
+      includeSecurity: true
+    deploymentChecks:
+      requiredEnvVars:
+        - DATABASE_URL
+        - REDIS_URL
+        - API_SECRET
+      buildCommand: "npm run build"
+      smokeTestCommand: "npm run test:smoke"

@@ -1,0 +1,26 @@
+#!/bin/sh
+# Shadow pre-commit hook
+# Run shadow info and lint before committing
+
+set -e
+
+echo "🔍 Shadow: Running pre-commit checks..."
+
+if [ -f "node_modules/.bin/shadow" ] || [ -f "dist/index.js" ]; then
+  SHADOW_CMD="node dist/index.js"
+  if [ -f "node_modules/.bin/shadow" ]; then
+    SHADOW_CMD="npx shadow"
+  fi
+
+  echo "  → Running shadow info..."
+  $SHADOW_CMD info --json > /dev/null 2>&1 || echo "  ⚠ shadow info failed (non-blocking)"
+
+  echo "  → Running shadow lint..."
+  if ! $SHADOW_CMD lint --json > /dev/null 2>&1; then
+    echo "  ⚠ shadow lint had issues (non-blocking)"
+  fi
+
+  echo "✓ Shadow pre-commit checks complete."
+else
+  echo "  → Shadow not built — skipping pre-commit checks."
+fi

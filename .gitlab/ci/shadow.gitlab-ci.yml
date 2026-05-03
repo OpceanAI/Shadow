@@ -1,0 +1,104 @@
+# Shadow GitLab CI template
+# Include in your .gitlab-ci.yml:
+#   include:
+#     - local: '.gitlab/ci/shadow.gitlab-ci.yml'
+
+stages:
+  - analyze
+  - test
+  - deploy
+
+shadow-info:
+  stage: analyze
+  image: node:22-alpine
+  before_script:
+    - npm ci
+    - npm run build
+  script:
+    - node dist/index.js info --json
+  artifacts:
+    paths:
+      - shadow-info.json
+    expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+shadow-lint:
+  stage: analyze
+  image: node:22-alpine
+  before_script:
+    - npm ci
+    - npm run build
+  script:
+    - node dist/index.js lint --json
+  artifacts:
+    paths:
+      - shadow-lint.json
+    expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+shadow-security:
+  stage: analyze
+  image: node:22-alpine
+  before_script:
+    - npm ci
+    - npm run build
+  script:
+    - node dist/index.js security --json
+  artifacts:
+    paths:
+      - shadow-security.json
+    expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+shadow-metrics:
+  stage: analyze
+  image: node:22-alpine
+  before_script:
+    - npm ci
+    - npm run build
+  script:
+    - node dist/index.js metrics --json
+  artifacts:
+    paths:
+      - shadow-metrics.json
+    expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+shadow-test:
+  stage: test
+  image: node:22-alpine
+  before_script:
+    - npm ci
+    - npm run build
+  script:
+    - node dist/index.js test --json
+  artifacts:
+    paths:
+      - shadow-test-results.json
+    expire_in: 7 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+shadow-deploy-check:
+  stage: deploy
+  image: node:22-alpine
+  before_script:
+    - npm ci
+    - npm run build
+  script:
+    - node dist/index.js deploy --json
+  artifacts:
+    paths:
+      - shadow-deploy-report.json
+    expire_in: 7 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+      allow_failure: true
