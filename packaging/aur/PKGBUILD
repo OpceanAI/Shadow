@@ -1,4 +1,4 @@
-# Maintainer: Anomaly Software <shadow@anomaly.co>
+# Maintainer: OpceanAI <shadow@opcean.ai>
 pkgname=shadow-cli
 pkgver=0.1.0
 pkgrel=1
@@ -8,7 +8,7 @@ url="https://github.com/OpceanAI/Shadow"
 license=('MIT')
 depends=('nodejs' 'npm')
 makedepends=('git')
-source=("$pkgname-$pkgver.tar.gz::https://registry.npmjs.org/shadow/-/shadow-$pkgver.tgz")
+source=("$pkgname-$pkgver.tar.gz::https://registry.npmjs.org/@opceanai/shadow/-/shadow-$pkgver.tgz")
 sha256sums=('0000000000000000000000000000000000000000000000000000000000000000')
 
 build() {

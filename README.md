@@ -86,7 +86,7 @@ Shadow answers those questions from the terminal, fast.
 
 ```bash
 # From npm (global)
-npm install -g shadow
+npm install -g @opceanai/shadow
 
 # From source
 git clone https://github.com/OpceanAI/Shadow.git

@@ -52,7 +52,7 @@ detect_platform() {
 # Install via npm (recommended)
 install_npm() {
   info "Installing Shadow CLI via npm..."
-  npm install -g shadow-cli
+  npm install -g @opceanai/shadow
   success "Shadow CLI installed successfully!"
   info "Run 'shadow --help' to get started."
 }

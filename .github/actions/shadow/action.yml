@@ -1,6 +1,6 @@
 name: Shadow Analysis
 description: Run Shadow CLI analysis on your codebase
-author: shadow-cli
+author: OpceanAI
 
 inputs:
   path:

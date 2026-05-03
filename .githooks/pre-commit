@@ -9,7 +9,7 @@ echo "🔍 Shadow: Running pre-commit checks..."
 if [ -f "node_modules/.bin/shadow" ] || [ -f "dist/index.js" ]; then
   SHADOW_CMD="node dist/index.js"
   if [ -f "node_modules/.bin/shadow" ]; then
-    SHADOW_CMD="npx shadow"
+    SHADOW_CMD="npx @opceanai/shadow"
   fi
 
   echo "  → Running shadow info..."
